@@ -1,5 +1,6 @@
 #include <iostream>
 #include <getopt.h>
+#include "Simulation.h"
 
 namespace {
 
@@ -19,19 +20,24 @@ namespace {
 using namespace std;
 
 int main(int argc, char* argv[]) {
+    std::string mode;
+    unsigned int stepCount;
     while (true) {
         int c = getopt_long_only(argc, argv, "", long_options, NULL);
         if (c == -1)
             break;
-        
         switch (c)
         {
         case MODE:
-            cout << "mode: " << optarg << endl;
+            mode = optarg;
             break;
-        case STEPS:
-            cout << "steps: " << optarg << endl;
-            break;
+        case STEPS: {
+            int i = stoi(optarg);
+            if (i < 0)
+                stepCount = 0;
+            else
+                stepCount = i;
+            break; }
         case CONF:
             cout << "conf: " << optarg << endl;
             break;
@@ -46,6 +52,19 @@ int main(int argc, char* argv[]) {
     if (argc - optind < 3) {
         cerr << argv[0] << ": three or more strategies are required!" << endl;
         return 1;
+    }
+
+    try {
+        if (mode == "detailed") {
+            PrisonersDilemma::DetailedSimulation sim = {
+                string(argv[optind]),
+                string(argv[optind + 1]),
+                string(argv[optind + 2]) };
+            sim.run(stepCount);
+        }
+    }
+    catch (const std::invalid_argument& e) {
+        cerr << argv[0] << ": " << e.what() << endl;
     }
 
     return 0;
