@@ -5,8 +5,8 @@ target_link_libraries(${TEST_NAME} ${LIB_NAME})
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
     # coverage; make coverage
-    set(OBJECT_DIR ${CMAKE_BINARY_DIR}/test/CMakeFiles/${TEST_NAME}.dir 
-            #${CMAKE_BINARY_DIR}/src/CMakeFiles/${LIB_NAME}.dir
+    set(OBJECT_DIR -d ${CMAKE_BINARY_DIR}/test/CMakeFiles/${TEST_NAME}.dir 
+            -d ${CMAKE_BINARY_DIR}/src/CMakeFiles/${LIB_NAME}.dir
         )
     add_custom_target(
         coverage
@@ -17,7 +17,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_custom_command(
         TARGET coverage
         COMMAND echo "=================== COVERAGE ===================="
-        COMMAND lcov -t "${TEST_NAME}" -o ${TEST_NAME}.info -c -d ${OBJECT_DIR} --rc lcov_branch_coverage=1
+        COMMAND lcov -t "${TEST_NAME}" -o ${TEST_NAME}.info -c ${OBJECT_DIR} --rc lcov_branch_coverage=1
         COMMAND genhtml -o report ${TEST_NAME}.info --rc lcov_branch_coverage=1;
         COMMAND echo "-- Coverage files have been output to ${CMAKE_BINARY_DIR}/coverage"
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
