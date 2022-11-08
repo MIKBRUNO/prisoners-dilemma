@@ -1,9 +1,6 @@
-#include "../src/StrategyFactory.h"
+#include <gtest/gtest.h>
 
 int main(int argc, char* argv[]) {
-	auto s = PrisonersDilemma::StrategyFactory::createStrategyByString("cooperate");
-	if (s->decide() == PrisonersDilemma::Decision::COOPERATE)
-		return 0;
-	else
-		return 1;
+	::testing::InitGoogleTest(&argc, argv);
+	return RUN_ALL_TESTS();
 }
