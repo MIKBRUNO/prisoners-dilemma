@@ -18,6 +18,11 @@ namespace PrisonersDilemma {
 			const std::string& s1,
 			const std::string& s2,
 			const std::string& s3);
+		ThreePrisonerSimulation(
+			const std::string& s1,
+			const std::string& s2,
+			const std::string& s3,
+			const std::array<unsigned int, 24>& mat);
 		~ThreePrisonerSimulation();
 	protected:
 		std::array<Strategy*, 3> competitors;
@@ -26,13 +31,12 @@ namespace PrisonersDilemma {
 		std::vector<std::array<Decision, 3>> history;
 		size_t matId(const Decision[3]) const;
 	};
+	void readMatrixFromFile(std::array<unsigned int, 24>* mat, const std::string& file);
 
 	class DetailedSimulation : public ThreePrisonerSimulation {
 	public:
-		DetailedSimulation(
-			const std::string& s1,
-			const std::string& s2,
-			const std::string& s3) : ThreePrisonerSimulation(s1, s2, s3) {}
+		using ThreePrisonerSimulation::ThreePrisonerSimulation;
+		
 		void run(unsigned int);
 	};
 
