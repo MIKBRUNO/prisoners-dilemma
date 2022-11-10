@@ -12,7 +12,6 @@ namespace PrisonersDilemma {
             o << "D";
             break;
         default:
-            o << "?";
             break;
         }
         return o;
