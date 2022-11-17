@@ -6,9 +6,8 @@ set(LIB_NAME dillema_lib)
 set(TEST_NAME tests)
 
 add_subdirectory (src) 
-add_subdirectory ("test")
-
 
 enable_testing()
-include(GoogleTest)
-gtest_discover_tests(${TEST_NAME})
+
+add_subdirectory ("test")
+
