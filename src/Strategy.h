@@ -21,9 +21,11 @@ namespace PrisonersDilemma {
 		Decision decide(std::vector<std::array<Decision, 3>>&, std::array<Strategy*, 3>&);
 	};
 
-	class RandomStrategy : public Strategy {
+	class DingDongStrategy : public Strategy {
 	public:
 		Decision decide(std::vector<std::array<Decision, 3>>&, std::array<Strategy*, 3>&);
+	private:
+		Decision d = Decision::COOPERATE;
 	};
 
 	class GoByMajorityStrategy : public Strategy {

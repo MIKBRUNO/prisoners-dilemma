@@ -40,9 +40,9 @@ namespace PrisonersDilemma::gameutils {
                     const Decision d3, unsigned int idx) const
     {
         size_t id = 0;
-		id += (d1 == Decision::COOPERATE ? 0u : 1u);
+		id += (d1 == Decision::COOPERATE ? 0u : 1u) << 2;
 		id += (d2 == Decision::COOPERATE ? 0u : 1u) << 1;
-		id += (d3 == Decision::COOPERATE ? 0u : 1u) << 2;
+		id += (d3 == Decision::COOPERATE ? 0u : 1u);
         if (idx > 2)
             throw std::invalid_argument("bad row index for 7x3 matrix");
         return mat->at(id*3 + idx);

@@ -35,11 +35,12 @@ namespace PrisonersDilemma {
 
 	void DetailedSimulation::run(unsigned int steps) {
 		for (unsigned int i = 0; i < steps; ++i) {
-			history.push_back({});
+			array<Decision, 3> decisions = {};
 			for (unsigned int j = 0; j < 3; ++j) {
-				history[i][j] = competitors[j]->decide(history, competitors);
-				std::cout << history[i][j] << ' ';
+				decisions[j] = competitors[j]->decide(history, competitors);
+				std::cout << decisions[j] << ' ';
 			}
+			history.push_back(decisions);
 			std::cout << std::endl;
 
 			score[0] += mat.at(history[i].data(), 0);

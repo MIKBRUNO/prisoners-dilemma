@@ -7,8 +7,8 @@ namespace PrisonersDilemma {
 		if (strat == "cooperate") {
 			return new CooperateStrategy();
 		}
-		else if (strat == "random") {
-			return new RandomStrategy();
+		else if (strat == "dingdong") {
+			return new DingDongStrategy();
 		}
 		else if (strat == "majority") {
 			return new GoByMajorityStrategy();

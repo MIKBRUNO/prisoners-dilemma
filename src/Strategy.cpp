@@ -1,5 +1,4 @@
 #include "Strategy.h"
-#include <random>
 
 using namespace std;
 
@@ -23,12 +22,9 @@ namespace PrisonersDilemma {
 		return Decision::COOPERATE;
 	}
 
-    Decision RandomStrategy::decide(vector<array<Decision, 3>>&, array<Strategy*, 3>&) {
-        srandom(123);
-        if (rand() > RAND_MAX/2)
-		    return Decision::COOPERATE;
-        else
-		    return Decision::DEFECT;
+    Decision DingDongStrategy::decide(vector<array<Decision, 3>>&, array<Strategy*, 3>&) {
+        d = (d == Decision::COOPERATE) ? Decision::DEFECT : Decision::COOPERATE;
+        return d;
 	}
 
     Decision GoByMajorityStrategy::decide(

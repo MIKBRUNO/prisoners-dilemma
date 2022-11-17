@@ -14,7 +14,7 @@ namespace PrisonersDilemma::gameutils {
                         const Decision d2,
                         const Decision d3, unsigned int idx) const;
         inline unsigned int at(const Decision d[3], unsigned int idx) const {
-            return at(d[0], d[1], d[3], idx);
+            return at(d[0], d[1], d[2], idx);
         }
         ~GameMatrix();
         GameMatrix (const GameMatrix&);
