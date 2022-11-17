@@ -4,6 +4,7 @@
 #include <map>
 #include <array>
 #include "Strategy.h"
+#include "GameMatrix.h"
 
 namespace PrisonersDilemma {
 
@@ -22,21 +23,28 @@ namespace PrisonersDilemma {
 			const std::string& s1,
 			const std::string& s2,
 			const std::string& s3,
-			const std::array<unsigned int, 24>& mat);
+			const gameutils::GameMatrix& mat);
 		~ThreePrisonerSimulation();
 	protected:
 		std::array<Strategy*, 3> competitors;
-		unsigned int* matrix;
+		gameutils::GameMatrix mat;
 		std::array<unsigned int, 3> score;
 		std::vector<std::array<Decision, 3>> history;
-		size_t matId(const Decision[3]) const;
 	};
-	void readMatrixFromFile(std::array<unsigned int, 24>* mat, const std::string& file);
+
 
 	class DetailedSimulation : public ThreePrisonerSimulation {
 	public:
 		using ThreePrisonerSimulation::ThreePrisonerSimulation;
 		
+		void run(unsigned int);
+	};
+
+
+	class FastSimulation : public ThreePrisonerSimulation {
+	public:
+		using ThreePrisonerSimulation::ThreePrisonerSimulation;
+
 		void run(unsigned int);
 	};
 

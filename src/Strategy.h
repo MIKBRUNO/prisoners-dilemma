@@ -1,5 +1,7 @@
 #pragma once
 #include <iostream>
+#include <vector>
+#include <array>
 
 namespace PrisonersDilemma {
 
@@ -11,12 +13,22 @@ namespace PrisonersDilemma {
 
 	class Strategy {
 	public:
-		virtual Decision decide() = 0;
+		virtual Decision decide(std::vector<std::array<Decision, 3>>&, std::array<Strategy*, 3>&) = 0;
 	};
 
-	class CooperateStartegy : public Strategy {
+	class CooperateStrategy : public Strategy {
 	public:
-		Decision decide();
+		Decision decide(std::vector<std::array<Decision, 3>>&, std::array<Strategy*, 3>&);
+	};
+
+	class RandomStrategy : public Strategy {
+	public:
+		Decision decide(std::vector<std::array<Decision, 3>>&, std::array<Strategy*, 3>&);
+	};
+
+	class GoByMajorityStrategy : public Strategy {
+	public:
+		Decision decide(std::vector<std::array<Decision, 3>>&, std::array<Strategy*, 3>&);
 	};
 
 }
