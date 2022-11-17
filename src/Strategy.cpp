@@ -1,9 +1,11 @@
 #include "Strategy.h"
 #include <random>
 
+using namespace std;
+
 namespace PrisonersDilemma {
 
-    std::ostream& operator<<(std::ostream& o, Decision d) {
+    ostream& operator<<(ostream& o, Decision d) {
         switch (d) {
         case Decision::COOPERATE:
             o << "C";
@@ -12,14 +14,43 @@ namespace PrisonersDilemma {
             o << "D";
             break;
         default:
-            o << "?";
             break;
         }
         return o;
     }
 
-	Decision CooperateStartegy::decide() {
+	Decision CooperateStrategy::decide(vector<array<Decision, 3>>&, array<Strategy*, 3>&) {
 		return Decision::COOPERATE;
 	}
+
+    Decision RandomStrategy::decide(vector<array<Decision, 3>>&, array<Strategy*, 3>&) {
+        srandom(123);
+        if (rand() > RAND_MAX/2)
+		    return Decision::COOPERATE;
+        else
+		    return Decision::DEFECT;
+	}
+
+    Decision GoByMajorityStrategy::decide(
+        vector<array<Decision, 3>>& history,
+        array<Strategy*, 3>& comps)
+    {
+        if (history.empty())
+            return Decision::COOPERATE;
+        unsigned int Cooperations = 0;
+        unsigned int Defections = 0;
+        for (array<Decision, 3>& decs : history) {
+            for (size_t i = 0; i < 3; ++i) {
+                if (decs[i] == Decision::COOPERATE)
+                    ++Cooperations;
+                else
+                    ++Defections;
+            }
+        }
+        if (Defections > Cooperations)
+            return Decision::DEFECT;
+        else
+            return Decision::COOPERATE;
+    }
 
 }
