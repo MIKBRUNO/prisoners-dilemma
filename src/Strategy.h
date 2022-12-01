@@ -34,6 +34,17 @@ namespace PrisonersDilemma {
 		inline virtual ~CooperateStrategy() {}
 	};
 
+	class DefectStrategy : public Strategy {
+	public:
+		virtual Decision decide(
+			const std::vector<Decision>& myhist,
+			const std::vector<Decision>& hist1,
+			const std::vector<Decision>& hist2);
+		inline virtual const char* name() const { return "defect"; };
+		inline virtual Strategy* clone() const { return new DefectStrategy; };
+		inline virtual ~DefectStrategy() {}
+	};
+
 	class AlternatingStrategy : public Strategy {
 	public:
 		virtual Decision decide(
@@ -73,19 +84,36 @@ namespace PrisonersDilemma {
 		std::vector<Strategy*> advisers;
 	};
 
-	// class TitForTat : public Strategy {
-	// public:
-	// 	explicit TitForTat(const std::string&);
-	// 	TitForTat(const TitForTat&);
-	// 	virtual ~TitForTat();
-	// 	virtual Decision decide(
-	// 		const std::vector<Decision>& myhist,
-	// 		const std::vector<Decision>& hist1,
-	// 		const std::vector<Decision>& hist2);
-	// 	inline virtual const char* name() const { return "tit-for-tat"; };
-	// 	inline virtual Strategy* clone() const { return new TitForTat(*this); };
-	// private:
-	// 	std::vector<Strategy*> advisers;
-	// };
+	class TitForTatStrategy : public Strategy {
+	public:
+		explicit TitForTatStrategy(const std::string&);
+		virtual Decision decide(
+			const std::vector<Decision>& myhist,
+			const std::vector<Decision>& hist1,
+			const std::vector<Decision>& hist2);
+		inline virtual ~TitForTatStrategy() {  }
+		inline virtual const char* name() const { return "tit-for-tat"; };
+		inline virtual Strategy* clone() const { return new TitForTatStrategy(*this); };
+	private:
+		bool either;
+	};
+
+	class ReactiveStrategy : public Strategy {
+	public:
+		explicit ReactiveStrategy(const std::string&);
+		virtual Decision decide(
+			const std::vector<Decision>& myhist,
+			const std::vector<Decision>& hist1,
+			const std::vector<Decision>& hist2);
+		inline virtual ~ReactiveStrategy() {  }
+		inline virtual const char* name() const { return "reactive"; };
+		inline virtual Strategy* clone() const { return new ReactiveStrategy(*this); };
+	private:
+		double FirstpP;
+		double CCp;
+		double CDp;
+		double DDp;
+		Decision decideByProbability(double);
+	};
 
 }

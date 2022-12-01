@@ -47,8 +47,9 @@ namespace PrisonersDilemma {
 
 	void ThreePrisonerSimulation::step() {
 		array<Decision, 3> decisions{};
-		for (unsigned int j = 0; j < 3; ++j)
-			decisions[j] = prisoners[j].decide(history[0], history[1], history[2]);
+		decisions[0] = prisoners[0].decide(history[0], history[1], history[2]);
+		decisions[1] = prisoners[1].decide(history[1], history[0], history[2]);
+		decisions[2] = prisoners[2].decide(history[2], history[1], history[0]);
 		for (unsigned int j = 0; j < 3; ++j) {
 			history[j].push_back(decisions[j]);
 			score[j] += mat.at(decisions.data(), j);

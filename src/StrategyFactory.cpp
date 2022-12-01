@@ -9,6 +9,9 @@ namespace PrisonersDilemma {
 		if (strat == "cooperate") {
 			return new CooperateStrategy();
 		}
+		else if (strat == "defect") {
+			return new DefectStrategy();
+		}
 		else if (strat == "alter") {
 			return new AlternatingStrategy();
 		}
@@ -19,7 +22,10 @@ namespace PrisonersDilemma {
 			return new VotingStrategy(confs);
 		}
 		else if (strat == "tit-for-tat") {
-			return new VotingStrategy(confs);
+			return new TitForTatStrategy(confs);
+		}
+		else if (strat == "reactive") {
+			return new ReactiveStrategy(confs);
 		}
 		else {
 			throw std::invalid_argument("bad strategy name");
