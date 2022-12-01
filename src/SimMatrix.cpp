@@ -1,4 +1,4 @@
-#include "GameMatrix.h"
+#include "SimMatrix.h"
 
 using namespace std;
 
@@ -18,12 +18,12 @@ namespace {
 
 }
 
-namespace PrisonersDilemma::gameutils {
+namespace PrisonersDilemma::simutils {
 
-    GameMatrix::GameMatrix() {
+    SimMatrix::SimMatrix() {
         mat = new array<unsigned int, 24> (DEFAULT_MATRIX);
     }
-    GameMatrix::GameMatrix(const string& file) {
+    SimMatrix::SimMatrix(const string& file) {
         ifstream f;
         f.exceptions( ifstream::failbit | ifstream::badbit | ifstream::eofbit );
 		f.open(file);
@@ -32,10 +32,10 @@ namespace PrisonersDilemma::gameutils {
 			f >> mat->at(i);
 		f.close();
     }
-    GameMatrix::~GameMatrix() {
+    SimMatrix::~SimMatrix() {
         delete mat;
     }
-    unsigned int GameMatrix::at(const Decision d1,
+    unsigned int SimMatrix::at(const Decision d1,
                     const Decision d2,
                     const Decision d3, unsigned int idx) const
     {
@@ -47,22 +47,22 @@ namespace PrisonersDilemma::gameutils {
             throw std::invalid_argument("bad row index for 7x3 matrix");
         return mat->at(id*3 + idx);
     }
-    GameMatrix::GameMatrix (const GameMatrix& o) {
+    SimMatrix::SimMatrix (const SimMatrix& o) {
         mat = new array<unsigned int, 24> (*o.mat);
     }
-    GameMatrix::GameMatrix (GameMatrix&& o) noexcept {
+    SimMatrix::SimMatrix (SimMatrix&& o) noexcept {
         delete mat;
         mat = o.mat;
         o.mat = nullptr;
     }
-    GameMatrix& GameMatrix::operator= (const GameMatrix& o) {
+    SimMatrix& SimMatrix::operator= (const SimMatrix& o) {
         if (this != &o) {
             delete mat;
             mat = new array<unsigned int, 24> (*o.mat);
         }
         return *this;
     }
-    GameMatrix& GameMatrix::operator= (GameMatrix&& o) {
+    SimMatrix& SimMatrix::operator= (SimMatrix&& o) {
         if (this != &o) {
             delete mat;
             mat = o.mat;

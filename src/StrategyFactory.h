@@ -6,7 +6,7 @@ namespace PrisonersDilemma {
 
 	class StrategyFactory {
 	public:
-		static Strategy* createStrategyByString(const std::string&);
+		static Strategy* createStrategyByString(const std::string&, const std::string& confs = "");
 	private:
 		StrategyFactory() {};
 	};

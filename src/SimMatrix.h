@@ -4,23 +4,23 @@
 #include <array>
 #include "Strategy.h"
 
-namespace PrisonersDilemma::gameutils {
+namespace PrisonersDilemma::simutils {
     
-    class GameMatrix {
+    class SimMatrix {
     public:
-        GameMatrix();
-        explicit GameMatrix(const std::string& matfile);
+        SimMatrix();
+        explicit SimMatrix(const std::string& matfile);
         unsigned int at(const Decision d1,
                         const Decision d2,
                         const Decision d3, unsigned int idx) const;
         inline unsigned int at(const Decision d[3], unsigned int idx) const {
             return at(d[0], d[1], d[2], idx);
         }
-        ~GameMatrix();
-        GameMatrix (const GameMatrix&);
-        GameMatrix (GameMatrix&&) noexcept;
-        GameMatrix& operator= (const GameMatrix&);
-        GameMatrix& operator= (GameMatrix&&);
+        ~SimMatrix();
+        SimMatrix (const SimMatrix&);
+        SimMatrix (SimMatrix&&) noexcept;
+        SimMatrix& operator= (const SimMatrix&);
+        SimMatrix& operator= (SimMatrix&&);
     private:
         std::array<unsigned int, 24>* mat;
     };

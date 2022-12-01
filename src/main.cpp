@@ -22,9 +22,10 @@ namespace {
 using namespace std;
 
 int main(int argc, char* argv[]) {
-	std::string mode = "detailed"s;
-	unsigned int stepCount = 0;
+	std::string mode;
+	unsigned int stepCount = 1;
 	std::string matFile = "";
+	std::string confDir = ""s;
 	while (true) {
 		int c = getopt_long_only(argc, argv, "", long_options, NULL);
 		if (c == -1)
@@ -50,7 +51,7 @@ int main(int argc, char* argv[]) {
 				stepCount = i;
 			break; }
 		case CONF:
-			cout << "conf: " << optarg << endl;
+			confDir = optarg;
 			break;
 		case MAT:
 			matFile = optarg;
@@ -63,11 +64,17 @@ int main(int argc, char* argv[]) {
 		cerr << argv[0] << ": three or more strategies are required!" << endl;
 		return 1;
 	}
+	if (mode.empty()) {
+		if (argc - optind > 3)
+			mode = "tournament";
+		else
+			mode = "detailed";
+	}
 
-	PrisonersDilemma::gameutils::GameMatrix matrix{};
+	PrisonersDilemma::simutils::SimMatrix matrix{};
 	if (matFile != "") {
 		try {
-			matrix = PrisonersDilemma::gameutils::GameMatrix(matFile);
+			matrix = PrisonersDilemma::simutils::SimMatrix(matFile);
 		}
 		catch (const ifstream::failure&) {
 			cerr << argv[0] << ": Exception while opening/reading matrix from file " <<
@@ -77,31 +84,35 @@ int main(int argc, char* argv[]) {
 	}
 
 	try {
-		if (mode == "detailed") {
-			PrisonersDilemma::DetailedSimulation sim = {
-				string(argv[optind]),
-				string(argv[optind + 1]),
-				string(argv[optind + 2]),
-				matrix
-			};
-			sim.run(stepCount);
+		vector<PrisonersDilemma::Prisoner> prisoners {};
+		for (size_t i = 0; i < argc - optind; ++i) {
+			string name = "["s + to_string(i) + "]"s;
+			prisoners.push_back(PrisonersDilemma::Prisoner(name, argv[optind + i], confDir));
 		}
-		else if (mode == "fast") {
-			PrisonersDilemma::FastSimulation sim = {
-				string(argv[optind]),
-				string(argv[optind + 1]),
-				string(argv[optind + 2]),
-				matrix
-			};
+		if (mode == "detailed" || mode == "fast") {
+			PrisonersDilemma::ThreePrisonerSimulation sim = { prisoners, matrix };
+			sim.run(stepCount, (mode == "fast"));
+		}
+		else if (mode == "tournament") {
+			PrisonersDilemma::Tournament sim = { prisoners, matrix };
 			sim.run(stepCount);
 		}
 		else {
-			cerr << argv[0] << ": invalid mode name" << mode << endl;
+			cerr << argv[0] << ": invalid mode name " << mode << endl;
 			return 1;
 		}
 	}
-	catch (const std::invalid_argument& e) {
+	catch (const invalid_argument& e) {
 		cerr << argv[0] << ": " << e.what() << endl;
+		return 1;
+	}
+	catch (const ifstream::failure& e) {
+		cerr << argv[0] << ": Exception while reading configuration files." << endl;
+		return 1;
+	}
+	catch (const exception& e) {
+		cerr << argv[0] << ": " << e.what() << endl;
+		return 1;
 	}
 
 	return 0;

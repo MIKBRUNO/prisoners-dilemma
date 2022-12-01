@@ -4,48 +4,64 @@
 #include <map>
 #include <array>
 #include "Strategy.h"
-#include "GameMatrix.h"
+#include "SimMatrix.h"
 
 namespace PrisonersDilemma {
 
-	class Simulation {
+	class Prisoner {
 	public:
-		virtual void run(unsigned int stepCount) = 0;
+		inline const std::string& name() const { return *nm; }
+		inline const Strategy& getStrategy() const { return *strat; }
+		inline Decision decide(
+			const std::vector<Decision>& myhist,
+			const std::vector<Decision>& hist1,
+			const std::vector<Decision>& hist2)
+		{ return strat->decide(myhist, hist1, hist2); }
+		Prisoner(const std::string& name, const  std::string& strategy, const std::string& cfgdr = "");
+		~Prisoner() noexcept;
+		Prisoner (const Prisoner&);
+        Prisoner (Prisoner&&) noexcept;
+        Prisoner& operator= (const Prisoner&);
+        Prisoner& operator= (Prisoner&&);
+	private:
+		Strategy* strat;
+		std::string* nm;
 	};
 
-	class ThreePrisonerSimulation : public Simulation {
+	class ThreePrisonerSimulation {
 	public:
-		ThreePrisonerSimulation(
-			const std::string& s1,
-			const std::string& s2,
-			const std::string& s3);
-		ThreePrisonerSimulation(
-			const std::string& s1,
-			const std::string& s2,
-			const std::string& s3,
-			const gameutils::GameMatrix& mat);
-		~ThreePrisonerSimulation();
-	protected:
-		std::array<Strategy*, 3> competitors;
-		gameutils::GameMatrix mat;
-		std::array<unsigned int, 3> score;
-		std::vector<std::array<Decision, 3>> history;
-	};
-
-
-	class DetailedSimulation : public ThreePrisonerSimulation {
-	public:
-		using ThreePrisonerSimulation::ThreePrisonerSimulation;
+		inline ThreePrisonerSimulation(
+			const std::vector<Prisoner> pris,
+			const simutils::SimMatrix& matrix = simutils::SimMatrix()
+		) : score({ 0, 0, 0 }), prisoners(pris), mat(matrix) {  }
 		
-		void run(unsigned int);
+		inline unsigned int getScore(size_t idx) const { return score[idx]; }
+		inline Decision getLastResult(size_t idx) const { return history[idx].back(); }
+		inline const std::vector<Prisoner>& getCompetitors() const { return prisoners; }
+		void step();
+		void run(unsigned int stepCount, bool fast);
+	protected:
+		std::vector<Prisoner> prisoners;
+		simutils::SimMatrix mat;
+		std::array<unsigned int, 3> score;
+		std::array<std::vector<Decision>, 3> history;
 	};
 
-
-	class FastSimulation : public ThreePrisonerSimulation {
+	class Tournament {
 	public:
-		using ThreePrisonerSimulation::ThreePrisonerSimulation;
-
-		void run(unsigned int);
+		inline Tournament(
+			const std::vector<Prisoner>& pris,
+			const simutils::SimMatrix& matrix = simutils::SimMatrix()
+		) : prisoners(pris), mat(matrix) {
+			for (auto p : prisoners)
+				score.push_back(0);
+		}
+		void run(unsigned int stepCount);
+		inline unsigned int getScore(size_t idx) const { return score[idx]; }
+	private:
+		std::vector<Prisoner> prisoners;
+		simutils::SimMatrix mat;
+		std::vector<unsigned int> score;
 	};
 
 }
