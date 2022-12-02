@@ -14,7 +14,8 @@ namespace {
 		{"mode", 1, NULL, MODE},
 		{"steps", 1, NULL, STEPS},
 		{"configs", 1, NULL, CONF},
-		{"matrix", 1, NULL, MAT}
+		{"matrix", 1, NULL, MAT},
+		{NULL, 0, NULL, 0}
 	};
 
 }
