@@ -36,7 +36,7 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable( ${TEST_NAME} "tests.cpp" "StrategyTests.cpp" )
+add_executable( ${TEST_NAME} "tests.cpp" "SimulationTests.cpp" )
 target_link_libraries(
     ${TEST_NAME}
     GTest::gtest_main
